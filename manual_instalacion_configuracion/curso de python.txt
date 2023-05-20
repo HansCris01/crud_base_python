@@ -1,0 +1,296 @@
+https://www.youtube.com/watch?v=nKPbfIU442g
+Metodo Cadena
+
+tiempo para continuar:  2:30:45
+
+-------------------------------------------
+
+configurar python 
+
+buscar: IDLE ---> abrir ubicacion de archivo
+
+copias la direccion de la ubicacion: 
+C:\Users\casa\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.11
+
+abres variables de entorno
+Te vas para variables de usuario para casa
+Busca:  PATH  ---> editar 
+click --> Nuevo 
+pegas y das aceptar
+
+Segundo paso:
+En esta ubicacion :
+C:\Users\casa\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.11
+
+ve a la carpeta : Scripts y copia la direccion: 
+
+C:\Users\casa\AppData\Local\Programs\Python\Python311\Scripts
+
+vas a variable de entorno, te diriges a PATH de nuevo y creas uno nuevo
+y pegas la direccion: 
+C:\Users\casa\AppData\Local\Programs\Python\Python311\Scripts
+
+guardas y das aceptar
+
+
+--------------------------------------------
+https://www.djangoproject.com/
+
+para instalar django comando:
+
+pip install Django==4.2
+
+
+----Extenciones----Para crud
+
+Boostrap 5 Quick Snippets
+GitHub Copilot
+Palenight Theme
+
+comando para crear proyecto:
+
+ django-admin startproject crud
+
+comando para correr servidor para acceder: 
+ 
+ python manage.py runserver
+
+para que el comando funcione tienes que probar en el simbolo del sistema donde funciona
+y el proyecto tiene que estar en Documentos ahi tienes que ir con CD y ver carpetas con DIR
+
+----------------------------------------cmd del sistema pero llegando a la carpeta del proyecto
+comando para crear las librerias: 
+
+python manage.py startapp libreria
+
+-------------------------------------
+Programar archivos: setting.py
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'libreria' #aqui escribimos libreria
+]
+
+
+----Vamos a vistas----
+
+carpeta: libreria  --> views.py
+
+vamos a progamar un saludo de prueba 
+
+from django.http import HttpResponse
+# Create your views here.
+
+def inicio(request):
+    return HttpResponse("<h1>Bienvenido</h1>")
+
+En la carpeta: libreria creas el archivo --> urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.inicio, name='inicio'),
+]
+
+Ahora vamos a la carpeta crud y buscamos el archivo urls.py 
+vamos agregar este codigo:
+
+
+from django.contrib import admin
+from django.urls import path
+from django.urls import include #se agrego este codigo
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('libreria.urls')), # se agrego este codigo
+]
+
+
+ejecutamos este comando: python manage.py runserver
+para visualizar 
+
+//vistas HTML 
+
+vamos a crear un caperta : templates dentro de la carpeta libreria
+
+dentro de la carpeta templates creas la carpeta: paginas
+ 
+nosotros.html
+
+Escribimos un codigo html de prueba  ! ctrl+spacio y enter se genera codigo html 
+
+---Ir a la carpeta libreria --> views.py 
+
+from django.shortcuts import render
+from django.http import HttpResponse
+# Create your views here.
+
+def inicio(request):
+    return HttpResponse("<h1>Bienvenido</h1>")
+def nosotros(request): #se agrego este codigo
+    return render(request, 'paginas/nosotros.html') #se agrego este codigo
+
+
+---ahora vamos a libreria --> urls.py
+
+vamos agregar unos codigos
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.inicio, name='inicio'),
+    path('nosotros', views.nosotros, name='nosotros') #agregamos esto
+]
+
+cada cambio que haces tienes que ejecutar ese codigo:
+
+ejecutamos este comando: python manage.py runserver
+
+//vamos a libreria/templates/
+vamos a crear un archivo: base.html
+
+bs5-$   control + espacio presionas enter para generar codigo para heredar 
+
+bs5-nav seleccionas bs5-navbar-minimal-a  nos genera otro codigo
+
+
+
+ejecutamos este comando: python manage.py runserver
+
+
+
+"{% url 'inicio' %}"
+"{% url 'libros' %}"
+"{% url 'nosotros' %}"
+
+"{% url 'crear' %}"
+
+
+<form enctype="multipart/form-data" method="post">
+
+
+</form>
+
+
+{% include 'libros/form.html' %}
+
+
+{% url 'editar' %}
+
+---Configuracion de base de datos---
+
+archivo: settings.py
+
+ir a DATABASES para hacer la modificacion 
+
+
+---Comando para paquete de Mysql
+
+Este comando te dice si tienes instalado el driver para mysql y pillow(para carga de imagenes):
+
+pip3 list   
+
+SI no tienes instalado el paquete, tienes que escribir este comando: 
+
+pip install PyMySQL  si no funciona lo desinstalas con: pip uninstall PyMySQL
+pip install Pillow
+pip install mysqlclient
+
+
+------Segunda configuracion 
+
+archivo: __init__.py
+
+
+vamos a escribir: 
+
+import pymysql
+pymysql.install_as_MySQLdb()
+
+
+comando para ejecutar libreria: 
+python manage.py runserver
+ 
+
+vamos al archivo: models.py 
+
+class Libro(models.Model):
+    id = models.AutoField(primary_key=True)
+    titulo = models.CharField(max_length=100, verbose_name='Titulo')
+    imagen = models.ImageField(upload_to='imagenes/', verbose_name='Imagen', null=True)
+    description = models.TextField(verbose_name='Descripcion', null=True)
+
+NOTA: crear la base de datos: libreria
+
+Comanddo para migracion: python manage.py makemigrations
+te va salir el mensaje: No change detected  
+No lo hagas caso 
+
+Siguiente comando:  python manage.py migrate
+
+__init__.py 
+
+
+
+comando: cls para limpiar pantalla
+
+En caso quieres hacer cambio en la tabla en el archivo: models.py
+
+comando: python manage.py makemigrations
+
+y
+
+escribir el siguiente comando: python manage.py migrate
+-----------------------------
+
+vamos al admin.py colocamos estos codigos:
+
+from .models import Libro
+
+admin.site.register(Libro)
+
+escribimos comando para crear usuario: python manage.py createsuperuser
+
+te va pedir datos para crear usuario, apunta esos datos como:
+
+usuario: casa
+email: hansluyo@outlook.es
+password: 123
+
+
+--Para correr cambios: python manage.py runserver
+
+te vas a : http://127.0.0.1:8000/admin
+
+inicias secion para llenar los datos a la tabla en ese administrativo, sirve para hacer pruebas
+
+
+--modificaciones en el archivo: models.py
+
+
+lINK DEL VIDEO: https://www.youtube.com/watch?v=ezIj71CX944&t=2778s
+
+tiempo: 1:47:09
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
